@@ -1,0 +1,25 @@
+[build-system]
+build-backend = "flit_core.buildapi"
+requires = ["flit_core >=3.4,<4"]
+
+[project]
+name = "aiida-query-builder-widget"
+version = "0.1.0"
+description = "A Solara widget for building AiiDA queries"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = ["solara>=1.0.0"]
+license = { file = "LICENSE" }
+keywords = ["aiida", "database", "query"]
+
+[project.urls]
+repository = "https://github.com/edan-bainglass/query-builder-widget.git"
+
+[tool.flit.module]
+name = "qb_widget"
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.format]
+quote-style = "double"
