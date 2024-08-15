@@ -3,10 +3,14 @@ from __future__ import annotations
 import typing as t
 from dataclasses import replace
 
+from reacton import use_effect, use_state
 from solara import Button, InputText, Row, Select, VBox
 from solara.core import component
 
-from qb_widget.models.node import NodeModel
+from qb_widget.utils import info
+from qb_widget.models import NodeModel
+from qb_widget.services import AiiDAService
+from qb_widget.services.aiida import NodeType
 
 
 @component
@@ -16,15 +20,36 @@ def NodePanel(
     handle_close: t.Callable[[], None],
 ):
     """Node panel component."""
+    types, set_types = use_state(t.cast(dict[str, NodeType], {}))
+    relationships, set_relationships = use_state([""])
 
     def select_type(value: str):
-        handle_change(replace(node, type=value))
+        try:
+            node_type = types[value]
+        except KeyError:
+            info.manager.post(f"Type {value} not found", "error")
+            node_type = NodeType()
+        handle_change(replace(node, type=node_type))
 
     def select_relationship(value: str):
         handle_change(replace(node, relationship=value))
 
     def reset_panel():
         handle_change(NodeModel(id=node.id, is_root=node.is_root))
+
+    def fetch_types():
+        types = AiiDAService.get_node_types()
+        set_types(types)
+
+    def update_relationships():
+        if not node.type.name:
+            return
+        relationships = AiiDAService.get_relationships(node.type)
+        set_relationships(relationships)
+
+    use_effect(fetch_types, [])
+
+    use_effect(update_relationships, [node.type])
 
     def ResetButton():
         return Button(
@@ -44,12 +69,8 @@ def NodePanel(
         with Row(classes=["align-items-center"]):
             Select(
                 label="Type",
-                values=[
-                    "Data",
-                    "Process",
-                    "Group",
-                ],
-                value=node.type,
+                values=[type.name for type in types.values()],
+                value=node.type.name,
                 on_value=select_type,
                 classes=["me-3 w-100"],
             )
@@ -59,11 +80,7 @@ def NodePanel(
             with Row(classes=["align-items-center"]):
                 Select(
                     label="With",
-                    values=[
-                        "Incoming",
-                        "Outgoing",
-                        "Group",
-                    ],
+                    values=relationships,
                     value=node.relationship,
                     on_value=select_relationship,
                     classes=["me-3 w-100"],

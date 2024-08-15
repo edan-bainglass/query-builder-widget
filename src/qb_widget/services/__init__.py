@@ -1,7 +1,5 @@
-from .aiida import GROUP_RELATIONSHIPS, NODE_RELATIONSHIPS, AiiDAService
+from .aiida import AiiDAService
 
 __all__ = [
     "AiiDAService",
-    "NODE_RELATIONSHIPS",
-    "GROUP_RELATIONSHIPS",
 ]

@@ -23,13 +23,14 @@ class AiiDAService:
         return qb.all()
 
     @staticmethod
-    def get_node_types() -> list[tuple[str, str]]:
+    def get_node_types() -> dict[str, NodeType]:
         """docstring"""
         return NODE_TYPES
 
-    def get_relationships(self, entry_point: str) -> list[str]:
+    @staticmethod
+    def get_relationships(node_type: NodeType) -> list[str]:
         """docstring"""
-        node = get_entry_point(entry_point)
+        node = get_entry_point(node_type)
         return (
             NODE_RELATIONSHIPS
             if issubclass(node, orm.Node)
@@ -39,31 +40,31 @@ class AiiDAService:
         )
 
     @staticmethod
-    def get_fields(entry_point: str) -> list[str]:
+    def get_fields(node_type: NodeType) -> list[str]:
         """docstring"""
-        if not entry_point:
+        if not node_type.name:
             return []
-        node = get_entry_point(entry_point)
+        node = get_entry_point(node_type)
         return list(node.fields._dict.keys())
 
     @staticmethod
-    def get_field(entry_point: str, field_name: str) -> orm.QbField:
+    def get_field(node_type: NodeType, field_name: str) -> orm.QbField:
         """docstring"""
-        node = get_entry_point(entry_point)
+        node = get_entry_point(node_type)
         return node.fields[field_name]
 
     @staticmethod
     def get_operators(
-        entry_point: str,
+        node_type: NodeType,
         field_name: str,
         is_attr_field: bool = False,
     ) -> list[str]:
         """docstring"""
-        if not entry_point or not field_name:
+        if not node_type or not field_name:
             return []
         if is_attr_field:
             return _ATTRIBUTE_OPERATORS
-        node = get_entry_point(entry_point)
+        node = get_entry_point(node_type)
         field = node.fields[field_name]
         if field.key == "value":
             if isinstance(node, orm.Str):
@@ -87,11 +88,11 @@ class AiiDAService:
 
     @staticmethod
     def validate_filter(
-        entry_point: str,
+        node_type: NodeType,
         filter_args: dict[str, str],
     ) -> bool:
         """docstring"""
-        node = get_entry_point(entry_point)
+        node = get_entry_point(node_type)
         field = node.fields[filter_args.pop("field")]
         _, operator, value = filter_args.values()
 
@@ -126,10 +127,12 @@ class AiiDAService:
         return True
 
 
-def get_entry_point(entry_point: str) -> orm.Node:
+def get_entry_point(node_type: NodeType):
     """docstring"""
-    group, name = entry_point.split("_")
-    return BaseFactory(group, name)  # type: ignore
+    return BaseFactory(
+        node_type.group,
+        node_type.entry_point,
+    )
 
 
 def cast_filter_value(value: str) -> t.Any:
@@ -159,14 +162,35 @@ def is_iterable(value: str) -> bool:
     return True
 
 
-NODE_TYPES = [
-    entry_point.attr
+class NodeType:
+    """docstring"""
+
+    def __init__(self, name: str = "", group: str = "", entry_point: str = ""):
+        self.name = name
+        self.group = group
+        self.entry_point = entry_point
+
+    def __str__(self) -> str:
+        return f"{self.group}:{self.name}"
+
+
+NODE_TYPES = {
+    entry_point.attr: NodeType(
+        entry_point.attr,
+        entry_point.group,
+        entry_point.name,
+    )
     for group in filter(
         lambda ep: "aiida." in ep,
         ep.get_entry_point_groups(),
     )
     for entry_point in ep.get_entry_points(group)
-]
+    if group in (
+        "aiida.node",
+        "aiida.data",
+        "aiida.groups",
+    )
+}
 
 NODE_RELATIONSHIPS = [
     "outgoing",

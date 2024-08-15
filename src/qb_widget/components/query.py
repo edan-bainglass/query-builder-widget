@@ -6,8 +6,8 @@ from reacton import use_state
 from solara import Button, VBox
 from solara.core import component
 
-from qb_widget.components.node import NodePanel
-from qb_widget.models.node import NodeModel
+from qb_widget.components import NodePanel
+from qb_widget.models import NodeModel
 
 
 @component
