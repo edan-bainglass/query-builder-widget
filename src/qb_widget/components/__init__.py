@@ -1,7 +1,11 @@
-from .query import QueryPanel
 from .help import HelpPanel
+from .info import InfoPanel
+from .node import NodePanel
+from .query import QueryPanel
 
 __all__ = [
-    "QueryPanel",
     "HelpPanel",
+    "InfoPanel",
+    "NodePanel",
+    "QueryPanel",
 ]
