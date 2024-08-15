@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from solara import Text, VBox
 from solara.core import component
 
