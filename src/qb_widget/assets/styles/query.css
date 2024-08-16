@@ -1,0 +1,13 @@
+.query-panel {
+  position: relative;
+}
+.query-panel .add-node-button {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  margin: 0 auto;
+  margin-left: calc(-40px / 2) !important;
+  min-width: 0 !important;
+  width: 40px !important;
+  padding: 0 8px !important;
+}

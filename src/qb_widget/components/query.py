@@ -3,9 +3,10 @@ from __future__ import annotations
 from uuid import uuid4
 
 from reacton import use_state
-from solara import Button, VBox
+from solara import Button, Style, VBox
 from solara.core import component
 
+from qb_widget.assets.styles import css
 from qb_widget.components import NodePanel
 from qb_widget.models import NodeModel
 
@@ -19,7 +20,9 @@ def QueryPanel():
         new_nodes = [*nodes, NodeModel(uuid4())]
         set_nodes(new_nodes)
 
-    with VBox(classes=["container"]):
+    with VBox(classes=["container query-panel"]):
+        Style(css / "query.css")
+
         for index, node in enumerate(nodes):
 
             def update_node(updated_node: NodeModel, i=index):
@@ -42,5 +45,5 @@ def QueryPanel():
             icon_name="mdi-plus",
             color="primary",
             on_click=add_node,
-            classes=["mx-auto"],
+            classes=["add-node-button"],
         )
