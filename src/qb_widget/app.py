@@ -12,8 +12,7 @@ from qb_widget.components import HelpPanel, InfoPanel, QueryPanel
 @component
 def App():
     """Main page component."""
-
-    with VBox(classes=["container"]) as app:
+    with VBox(classes=["container"]):
         with Head():
             Title("AiiDA Query Builder App")
             Style(Path(__file__).parent / "app.css")
@@ -23,5 +22,3 @@ def App():
                 QueryPanel()
             with Tab("Help"):
                 HelpPanel()
-
-    return app

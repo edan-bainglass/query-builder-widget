@@ -65,7 +65,7 @@ def NodePanel(
             on_click=handle_close,
         )
 
-    with VBox(classes=["container border px-5 mb-3"]) as node_panel:
+    with VBox(classes=["container border px-5 mb-3"]):
         with Row(classes=["align-items-center"]):
             Select(
                 label="Type",
@@ -87,5 +87,3 @@ def NodePanel(
                 )
                 InputText("Tag", classes=["me-3"])
                 ResetButton()
-
-    return node_panel

@@ -19,7 +19,7 @@ def QueryPanel():
         new_nodes = [*nodes, NodeModel(uuid4())]
         set_nodes(new_nodes)
 
-    with VBox(classes=["container"]) as query_panel:
+    with VBox(classes=["container"]):
         for index, node in enumerate(nodes):
 
             def update_node(updated_node: NodeModel, i=index):
@@ -44,5 +44,3 @@ def QueryPanel():
             on_click=add_node,
             classes=["mx-auto"],
         )
-
-    return query_panel
