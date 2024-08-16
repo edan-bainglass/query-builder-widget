@@ -28,7 +28,7 @@ class AiiDAService:
         return NODE_TYPES
 
     @staticmethod
-    def get_relationships(node_type: NodeType) -> list[str]:
+    def get_relationship_types(node_type: NodeType) -> list[str]:
         """docstring"""
         node = get_entry_point(node_type)
         return (

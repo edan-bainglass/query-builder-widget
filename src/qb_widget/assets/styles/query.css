@@ -1,13 +1,19 @@
-.query-panel {
+.query-panel .node-list {
   position: relative;
 }
-.query-panel .add-node-button {
+.query-panel .node-list .add-node-button {
   position: absolute;
-  bottom: 14px;
+  bottom: -6px;
   left: 50%;
   margin: 0 auto;
   margin-left: calc(-40px / 2) !important;
   min-width: 0 !important;
   width: 40px !important;
   padding: 0 8px !important;
+}
+.query-panel .query-controls {
+  margin: 10px !important;
+}
+.query-panel .query-controls .query-controls-float {
+  margin-left: auto;
 }

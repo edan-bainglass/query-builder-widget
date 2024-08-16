@@ -4,7 +4,7 @@ import typing as t
 from dataclasses import replace
 
 from reacton import use_effect, use_state
-from solara import Button, InputText, Row, Select, Style, VBox
+from solara import Button, Card, Column, InputText, Row, Select, Style
 from solara.core import component
 
 from qb_widget.assets.styles import css
@@ -22,7 +22,7 @@ def NodePanel(
 ):
     """Node panel component."""
     types, set_types = use_state(t.cast(dict[str, NodeType], {}))
-    relationships, set_relationships = use_state([""])
+    relationship_types, set_relationship_types = use_state([""])
 
     def select_type(value: str):
         try:
@@ -42,51 +42,75 @@ def NodePanel(
         types = AiiDAService.get_node_types()
         set_types(types)
 
-    def update_relationships():
+    def fetch_relationship_types():
         if not node.type.name:
             return
-        relationships = AiiDAService.get_relationships(node.type)
-        set_relationships(relationships)
+        relationships = AiiDAService.get_relationship_types(node.type)
+        set_relationship_types(relationships)
 
     use_effect(fetch_types, [])
 
-    use_effect(update_relationships, [node.type])
+    use_effect(fetch_relationship_types, [node.type])
 
-    def ResetButton():
-        return Button(
-            icon_name="mdi-refresh",
-            color="warning",
-            on_click=reset_panel,
-        )
+    def Controls():
+        with Row(classes=["node-controls"]):
+            Button(
+                icon_name="mdi-filter",
+                classes=["filter-node-button"],
+            )
+            Button(
+                icon_name="mdi-format-list-bulleted",
+                classes=["project-node-button"],
+            )
+            Button(
+                icon_name="mdi-refresh",
+                color="warning",
+                on_click=reset_panel,
+                classes=["reset-node-button"],
+            )
+            if not node.is_root:
+                Button(
+                    icon_name="mdi-close",
+                    color="error",
+                    on_click=handle_close,
+                    classes=["close-node-button"],
+                )
 
-    def CloseButton():
-        return Button(
-            icon_name="mdi-close",
-            color="error",
-            on_click=handle_close,
-        )
+    def TypeSelector():
+        with Row(classes=["selector-row"]):
+            with Column(classes=["flex-grow-1"]):
+                Select(
+                    label="Select node type",
+                    values=[type.name for type in types.values()],
+                    value=node.type.name,
+                    on_value=select_type,
+                )
+            with Column():
+                InputText("Our tag", classes=["me-3"])
 
-    with VBox(classes=["container node-panel"]):
+    def RelationshipSelector():
+        with Row(classes=["selector-row"]):
+            with Column(classes=["flex-grow-1"]):
+                Select(
+                    label="Select relationship",
+                    values=relationship_types,
+                    value=node.relationship or None,  # type: ignore
+                    on_value=select_relationship,
+                )
+            with Column():
+                InputText("Their tag", classes=["me-3"])
+
+    with Card(
+        classes=[
+            "container node-panel",
+            "root" if node.is_root else "",
+            "mb-3",
+        ]
+    ):
         Style(css / "node.css")
 
-        with Row(classes=["align-items-center"]):
-            Select(
-                label="Type",
-                values=[type.name for type in types.values()],
-                value=node.type.name,
-                on_value=select_type,
-                classes=["me-3 w-100"],
-            )
-            InputText("Tag", classes=["me-3"])
-            ResetButton() if node.is_root else CloseButton()
+        Controls()
+        TypeSelector()
+
         if not node.is_root:
-            with Row(classes=["align-items-center"]):
-                Select(
-                    label="With",
-                    values=relationships,
-                    value=node.relationship,
-                    on_value=select_relationship,
-                    classes=["me-3 w-100"],
-                )
-                InputText("Tag", classes=["me-3"])
-                ResetButton()
+            RelationshipSelector()
