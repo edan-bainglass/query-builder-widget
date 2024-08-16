@@ -4,13 +4,14 @@ import typing as t
 from dataclasses import replace
 
 from reacton import use_effect, use_state
-from solara import Button, InputText, Row, Select, VBox
+from solara import Button, InputText, Row, Select, Style, VBox
 from solara.core import component
 
-from qb_widget.utils import info
+from qb_widget.assets.styles import css
 from qb_widget.models import NodeModel
 from qb_widget.services import AiiDAService
 from qb_widget.services.aiida import NodeType
+from qb_widget.utils import info
 
 
 @component
@@ -65,7 +66,9 @@ def NodePanel(
             on_click=handle_close,
         )
 
-    with VBox(classes=["container border px-5 mb-3"]):
+    with VBox(classes=["container node-panel"]):
+        Style(css / "node.css")
+
         with Row(classes=["align-items-center"]):
             Select(
                 label="Type",
