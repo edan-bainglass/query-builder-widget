@@ -11,8 +11,9 @@ from qb_widget.components import HelpPanel, InfoPanel, QueryPanel
 @component
 def App():
     """Main page component."""
+    Style(css / "app.css")
+
     with VBox(classes=["container"]):
-        Style(css / "app.css")
         with Head():
             Title("AiiDA Query Builder App")
         InfoPanel()

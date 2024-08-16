@@ -100,15 +100,16 @@ def NodePanel(
             with Column():
                 InputText("Their tag", classes=["me-3"])
 
+    Style(css / "node.css")
+
     with Card(
+        margin=0,
         classes=[
             "container node-panel",
             "root" if node.is_root else "",
             "mb-3",
-        ]
+        ],
     ):
-        Style(css / "node.css")
-
         Controls()
         TypeSelector()
 

@@ -47,6 +47,7 @@ def QueryPanel():
                 classes=["add-node-button"],
             )
 
+    Style(css / "query.css")
+
     with VBox(classes=["container query-panel"]):
-        Style(css / "query.css")
         NodeList()
