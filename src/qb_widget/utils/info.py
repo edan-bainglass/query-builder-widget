@@ -32,7 +32,7 @@ class InfoManager:
             The type of the message (error, warning, success, info)
         """
         if not message:
-            self._content.value = []
+            self.clear()
             return
 
         if post_type == "error":
@@ -44,6 +44,10 @@ class InfoManager:
         else:
             new = alert.Info(message)
         self._content.value = [new]
+
+    def clear(self):
+        """Clear the content of the info panel."""
+        self._content.value = []
 
 
 manager = InfoManager()

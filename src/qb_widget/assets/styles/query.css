@@ -1,33 +1,33 @@
 .query-panel .node-list {
   position: relative;
 }
-.query-panel .node-list .node-panel {
+.query-panel .node-list .node-card {
   position: relative;
   border: 1px solid #dee2e6 !important;
   margin-bottom: 12px !important;
 }
-.query-panel .node-list .node-panel:not(:last-of-type) {
+.query-panel .node-list .node-card:not(:last-of-type) {
   margin-bottom: 24px !important;
 }
-.query-panel .node-list .node-panel .node-controls {
+.query-panel .node-list .node-card .node-controls {
   position: absolute;
   top: -17px;
   right: -16px;
   padding: 4px;
   column-gap: 4px !important;
 }
-.query-panel .node-list .node-panel .node-controls button {
+.query-panel .node-list .node-card .node-controls button {
   min-width: 0 !important;
   padding: 0 6px !important;
   height: 24px !important;
 }
-.query-panel .node-list .node-panel .node-controls button i {
+.query-panel .node-list .node-card .node-controls button i {
   font-size: 12px;
 }
-.query-panel .node-list .node-panel.root .node-controls {
+.query-panel .node-list .node-card.root .node-controls {
   right: 12px;
 }
-.query-panel .node-list .node-panel .selector-row {
+.query-panel .node-list .node-card .selector-row {
   column-gap: 12px !important;
 }
 .query-panel .node-list .add-node-button {

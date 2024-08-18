@@ -7,7 +7,7 @@ from solara import Button, Style, VBox
 from solara.core import component
 
 from qb_widget.assets.styles import css
-from qb_widget.components import NodePanel
+from qb_widget.components import NodeCard
 from qb_widget.models import NodeModel
 
 
@@ -34,7 +34,7 @@ def QueryPanel():
                     copy.pop(i)
                     set_nodes(copy)
 
-                NodePanel(
+                NodeCard(
                     node=node,
                     handle_change=update_node,
                     handle_close=remove_node,

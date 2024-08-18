@@ -14,14 +14,14 @@ from qb_widget.utils import info
 
 
 @component
-def NodePanel(
+def NodeCard(
     node: NodeModel,
     handle_change: t.Callable[[NodeModel], None],
     handle_close: t.Callable[[], None],
 ):
-    """Node panel component."""
+    """Node card component."""
     types, set_types = use_state(t.cast(dict[str, NodeType], {}))
-    relationship_types, set_relationship_types = use_state([""])
+    relationship_types, set_relationship_types = use_state(t.cast(list[str], []))
 
     def select_type(value: str):
         try:
@@ -29,6 +29,7 @@ def NodePanel(
         except KeyError:
             info.manager.post(f"Type {value} not found", "error")
             node_type = NodeType()
+        info.manager.clear()
         handle_change(replace(node, type=node_type))
 
     def select_relationship(value: str):
@@ -42,7 +43,7 @@ def NodePanel(
         set_types(types)
 
     def fetch_relationship_types():
-        if not node.type.name:
+        if node.is_root:
             return
         relationships = AiiDAService.get_relationship_types(node.type)
         set_relationship_types(relationships)
@@ -93,16 +94,16 @@ def NodePanel(
                 Select(
                     label="Select relationship",
                     values=relationship_types,
-                    value=node.relationship or None,  # type: ignore
+                    value=node.relationship,
                     on_value=select_relationship,
-                )
+                )  # type: ignore
             with Column():
                 InputText("Their tag", classes=["me-3"])
 
     with Card(
         margin=0,
         classes=[
-            "container node-panel",
+            "container node-card",
             "root" if node.is_root else "",
         ],
     ):

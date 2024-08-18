@@ -10,5 +10,5 @@ from qb_widget.services.aiida import NodeType
 class NodeModel:
     id: UUID
     type: NodeType = NodeType()
-    relationship: str = ""
+    relationship: str | None = None
     is_root: bool = False
