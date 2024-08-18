@@ -24,7 +24,7 @@ class AiiDAService:
         qb = orm.QueryBuilder()
         for node, args in query:
             qb.append(node, **args)  # type: ignore
-        qb.limit(10)  # TODO paginate
+        qb.limit(1000)
         return qb.all(flat=True)
 
     @staticmethod

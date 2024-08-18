@@ -1,3 +1,26 @@
+.results-panel .pagination-controls {
+  margin-bottom: 12px !important;
+  justify-content: space-between !important;
+}
+.results-panel .pagination-controls button {
+  min-width: 0 !important;
+  width: 30px !important;
+  height: 30px !important;
+  padding: 0 !important;
+}
+.results-panel .pagination-controls button.active {
+  background-color: lightgray !important;
+  border-color: lightgray !important;
+}
+.results-panel .pagination-controls .more-pages {
+  font-weight: bold !important;
+}
+.results-panel .pagination-controls .more-pages.show {
+  visibility: visible !important;
+}
+.results-panel .pagination-controls .more-pages.hide {
+  visibility: hidden !important;
+}
 .results-panel .result-card {
   border: 1px solid #dee2e6;
 }
