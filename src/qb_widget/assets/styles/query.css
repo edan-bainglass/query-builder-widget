@@ -1,6 +1,35 @@
 .query-panel .node-list {
   position: relative;
 }
+.query-panel .node-list .node-panel {
+  position: relative;
+  border: 1px solid #dee2e6 !important;
+  margin-bottom: 12px !important;
+}
+.query-panel .node-list .node-panel:not(:last-of-type) {
+  margin-bottom: 24px !important;
+}
+.query-panel .node-list .node-panel .node-controls {
+  position: absolute;
+  top: -17px;
+  right: -16px;
+  padding: 4px;
+  column-gap: 4px !important;
+}
+.query-panel .node-list .node-panel .node-controls button {
+  min-width: 0 !important;
+  padding: 0 6px !important;
+  height: 24px !important;
+}
+.query-panel .node-list .node-panel .node-controls button i {
+  font-size: 12px;
+}
+.query-panel .node-list .node-panel.root .node-controls {
+  right: 12px;
+}
+.query-panel .node-list .node-panel .selector-row {
+  column-gap: 12px !important;
+}
 .query-panel .node-list .add-node-button {
   position: absolute;
   bottom: -6px;
@@ -12,8 +41,8 @@
   padding: 0 8px !important;
 }
 .query-panel .query-controls {
-  margin: 10px !important;
+  justify-content: space-between !important;
 }
-.query-panel .query-controls .query-controls-float {
-  margin-left: auto;
+.query-panel .query-controls .main-controls {
+  column-gap: 4px !important;
 }

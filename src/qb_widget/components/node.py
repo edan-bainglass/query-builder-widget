@@ -4,10 +4,9 @@ import typing as t
 from dataclasses import replace
 
 from reacton import use_effect, use_state
-from solara import Button, Card, Column, InputText, Row, Select, Style
+from solara import Button, Card, Column, InputText, Row, Select
 from solara.core import component
 
-from qb_widget.assets.styles import css
 from qb_widget.models import NodeModel
 from qb_widget.services import AiiDAService
 from qb_widget.services.aiida import NodeType
@@ -100,14 +99,11 @@ def NodePanel(
             with Column():
                 InputText("Their tag", classes=["me-3"])
 
-    Style(css / "node.css")
-
     with Card(
         margin=0,
         classes=[
             "container node-panel",
             "root" if node.is_root else "",
-            "mb-3",
         ],
     ):
         Controls()
