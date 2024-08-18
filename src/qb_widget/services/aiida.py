@@ -9,18 +9,23 @@ from aiida import orm
 from aiida.plugins.factories import BaseFactory
 from yaml import safe_load
 
+if t.TYPE_CHECKING:
+    from qb_widget.models.node import NodeModel
+
 
 class AiiDAService:
     """docstring"""
 
     @staticmethod
-    def get_results(query: list[tuple[orm.Node, dict]]) -> list[t.Any]:
+    def get_results(nodes: list[NodeModel]) -> list[t.Any]:
         """docstring"""
+        if not (query := get_query_from_node_models(nodes)):
+            return []
         qb = orm.QueryBuilder()
         for node, args in query:
             qb.append(node, **args)  # type: ignore
         qb.limit(10)  # TODO paginate
-        return qb.all()
+        return qb.all(flat=True)
 
     @staticmethod
     def get_node_types() -> dict[str, NodeType]:
@@ -30,6 +35,8 @@ class AiiDAService:
     @staticmethod
     def get_relationship_types(node_type: NodeType) -> list[str]:
         """docstring"""
+        if not node_type.name:
+            return []
         node = get_entry_point(node_type)
         return (
             NODE_RELATIONSHIPS
@@ -162,10 +169,20 @@ def is_iterable(value: str) -> bool:
     return True
 
 
+def get_query_from_node_models(nodes: list[NodeModel]) -> list[tuple[orm.Node, dict]]:
+    """docstring"""
+    return [(get_entry_point(node.type), {}) for node in nodes]  # type: ignore
+
+
 class NodeType:
     """docstring"""
 
-    def __init__(self, name: str = "", group: str = "", entry_point: str = ""):
+    def __init__(
+        self,
+        name: str = "",
+        group: str = "",
+        entry_point: str = "",
+    ):
         self.name = name
         self.group = group
         self.entry_point = entry_point
@@ -185,7 +202,8 @@ NODE_TYPES = {
         ep.get_entry_point_groups(),
     )
     for entry_point in ep.get_entry_points(group)
-    if group in (
+    if group
+    in (
         "aiida.node",
         "aiida.data",
         "aiida.groups",
@@ -193,14 +211,14 @@ NODE_TYPES = {
 }
 
 NODE_RELATIONSHIPS = [
-    "outgoing",
-    "incoming",
-    "group",
+    "Outgoing",
+    "Incoming",
+    "Group",
 ]
 
 GROUP_RELATIONSHIPS = [
-    "node",
-    "user",
+    "Node",
+    "User",
 ]
 
 _BOOLEANS = {
