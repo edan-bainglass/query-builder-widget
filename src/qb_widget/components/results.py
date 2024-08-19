@@ -1,12 +1,16 @@
 from __future__ import annotations
 
+import typing as t
+
 from reacton import use_state
 from solara import Button, Row, Style, Text, VBox
 from solara.core import component
 
 from qb_widget.assets.styles import css
-from qb_widget.components.result import ResultCard
-from qb_widget.models.result import ResultModel
+from qb_widget.components import ResultCard
+
+if t.TYPE_CHECKING:
+    from qb_widget.models import ResultModel
 
 
 @component

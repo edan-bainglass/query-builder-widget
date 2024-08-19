@@ -9,9 +9,8 @@ from solara.core import component
 
 from qb_widget.assets.styles import css
 from qb_widget.components import NodeCard
-from qb_widget.models import NodeModel
-from qb_widget.models.result import ResultModel
-from qb_widget.services.aiida import AiiDAService
+from qb_widget.models import NodeModel, ResultModel
+from qb_widget.services import AiiDAService
 
 
 @component

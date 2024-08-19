@@ -8,9 +8,8 @@ from solara.core import component
 from solara.lab import Tab, Tabs
 
 from qb_widget.assets.styles import css
-from qb_widget.components import HelpPanel, InfoPanel, QueryPanel
-from qb_widget.components.results import ResultsPanel
-from qb_widget.models.result import ResultModel
+from qb_widget.components import HelpPanel, InfoPanel, QueryPanel, ResultsPanel
+from qb_widget.models import ResultModel
 
 
 @component

@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import typing as t
+
 from solara import Card, display
 from solara.core import component
 
-from qb_widget.models.result import ResultModel
+if t.TYPE_CHECKING:
+    from qb_widget.models import ResultModel
 
 
 @component
