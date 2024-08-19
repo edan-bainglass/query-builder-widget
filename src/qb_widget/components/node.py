@@ -10,7 +10,7 @@ from solara.core import component
 from qb_widget.models import NodeModel
 from qb_widget.services import AiiDAService
 from qb_widget.services.aiida import NodeType
-from qb_widget.utils import info
+from qb_widget.utils.info import notice
 
 
 @component
@@ -27,9 +27,9 @@ def NodeCard(
         try:
             node_type = types[value]
         except KeyError:
-            info.manager.post(f"Type {value} not found", "error")
+            notice.post(f"Type {value} not found", notice.TYPES.ERROR)
             node_type = NodeType()
-        info.manager.clear()
+        notice.clear()
         handle_change(replace(node, type=node_type))
 
     def select_relationship(value: str):

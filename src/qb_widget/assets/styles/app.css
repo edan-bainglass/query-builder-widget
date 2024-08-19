@@ -2,3 +2,21 @@
 .solara-content-main > .v-content__wrap > div {
   overflow-y: scroll !important;
 }
+
+.info-panel {
+  position: relative;
+}
+.info-panel .v-alert {
+  margin-bottom: 0 !important;
+}
+.info-panel .close-info-button {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  min-width: 0 !important;
+  padding: 0 6px !important;
+  height: 24px !important;
+}
+.info-panel .close-info-button i {
+  font-size: 12px;
+}

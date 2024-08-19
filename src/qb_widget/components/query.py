@@ -66,7 +66,7 @@ def QueryPanel(handle_submit: t.Callable[[ResultModel], None]):
         with Row(classes=["query-controls"]):
             Button(
                 icon_name="mdi-code-tags",
-                classes=["code-toggle"]
+                classes=["code-toggle"],
             )
             with Row(classes=["main-controls"]):
                 Button(
