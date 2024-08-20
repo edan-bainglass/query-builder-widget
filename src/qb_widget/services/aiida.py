@@ -36,7 +36,7 @@ class AiiDAService:
     @staticmethod
     def get_relationship_types(node_type: NodeType) -> list[str]:
         """docstring"""
-        if not node_type.name:
+        if not node_type.is_valid():
             return []
         node = get_entry_point(node_type)
         return (
@@ -50,7 +50,7 @@ class AiiDAService:
     @staticmethod
     def get_fields(node_type: NodeType) -> list[str]:
         """docstring"""
-        if not node_type.name:
+        if not node_type.is_valid():
             return []
         node = get_entry_point(node_type)
         return list(node.fields._dict.keys())
@@ -192,8 +192,8 @@ class NodeType:
     group: str = ""
     entry_point: str = ""
 
-    def __str__(self) -> str:
-        return f"{self.group}:{self.name}"
+    def is_valid(self) -> bool:
+        return bool(self.name)
 
 
 NODE_TYPES = {

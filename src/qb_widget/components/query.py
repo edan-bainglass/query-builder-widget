@@ -3,7 +3,7 @@ from __future__ import annotations
 import typing as t
 from uuid import uuid4
 
-from reacton import use_state
+from reacton import use_effect, use_state
 from solara import Button, Row, Style, VBox
 from solara.core import component
 
@@ -17,6 +17,7 @@ from qb_widget.services import AiiDAService
 def QueryPanel(handle_submit: t.Callable[[ResultModel], None]):
     """Query panel component."""
     nodes, set_nodes = use_state([NodeModel(uuid4(), is_root=True)])
+    is_valid, set_is_valid = use_state(False)
 
     def add_node():
         new_nodes = [*nodes, NodeModel(uuid4())]
@@ -34,6 +35,12 @@ def QueryPanel(handle_submit: t.Callable[[ResultModel], None]):
 
     def show_query_code():
         pass
+
+    def validate():
+        valid = all(node.is_valid() for node in nodes)
+        set_is_valid(valid)
+
+    use_effect(validate, [nodes])
 
     def NodeList():
         with VBox(classes=["node-list"]):
@@ -78,6 +85,7 @@ def QueryPanel(handle_submit: t.Callable[[ResultModel], None]):
                     "Submit",
                     color="success",
                     on_click=submit_query,
+                    disabled=not is_valid
                 )
 
     Style(css / "query.css")
