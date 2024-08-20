@@ -3,6 +3,7 @@ from __future__ import annotations
 import datetime
 import typing as t
 from collections import OrderedDict
+from dataclasses import dataclass
 
 import aiida.plugins.entry_point as ep
 from aiida import orm
@@ -174,18 +175,22 @@ def get_query_from_node_models(nodes: list[NodeModel]) -> list[tuple[orm.Node, d
     return [(get_entry_point(node.type), {}) for node in nodes]  # type: ignore
 
 
+@dataclass
 class NodeType:
-    """docstring"""
+    """Class to represent an AiiDA node type.
 
-    def __init__(
-        self,
-        name: str = "",
-        group: str = "",
-        entry_point: str = "",
-    ):
-        self.name = name
-        self.group = group
-        self.entry_point = entry_point
+    Attributes
+    ----------
+    `name` : `str`
+        The name of the node type, e.g. `Int`
+    `group` : `str`
+        The group of the node type, eg. `aiida.data`.
+    `entry_point` : `str`
+        The entry point of the node type, e.g. `core.int`.
+    """
+    name: str = ""
+    group: str = ""
+    entry_point: str = ""
 
     def __str__(self) -> str:
         return f"{self.group}:{self.name}"
