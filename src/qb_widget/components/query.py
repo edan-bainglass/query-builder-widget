@@ -47,14 +47,10 @@ def QueryPanel(handle_submit: t.Callable[[list[ResultModel]], None]):
             for index, node in enumerate(nodes):
 
                 def update_node(updated_node: NodeModel, i=index):
-                    copy = nodes.copy()
-                    copy[i] = updated_node
-                    set_nodes(copy)
+                    set_nodes(nodes[:i] + [updated_node] + nodes[i + 1:])
 
                 def remove_node(i: int = index):
-                    copy = nodes.copy()
-                    copy.pop(i)
-                    set_nodes(copy)
+                    set_nodes(nodes[:i] + nodes[i + 1:])
 
                 NodeCard(
                     node=node,
