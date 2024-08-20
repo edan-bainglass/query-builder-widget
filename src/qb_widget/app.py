@@ -18,10 +18,10 @@ def App():
     selected_tab, set_selected_tab = use_state(0)
     results, set_results = use_state(t.cast(list[ResultModel], []))
 
-    def switch_tab(value):
+    def switch_tab(value: int):
         set_selected_tab(value)
 
-    def update_results(new_results):
+    def update_results(new_results: list[ResultModel]):
         set_results(new_results)
         set_selected_tab(1)
 

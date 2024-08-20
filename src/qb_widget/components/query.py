@@ -14,7 +14,7 @@ from qb_widget.services import AiiDAService
 
 
 @component
-def QueryPanel(handle_submit: t.Callable[[ResultModel], None]):
+def QueryPanel(handle_submit: t.Callable[[list[ResultModel]], None]):
     """Query panel component."""
     nodes, set_nodes = use_state([NodeModel(uuid4(), is_root=True)])
     is_valid, set_is_valid = use_state(False)
