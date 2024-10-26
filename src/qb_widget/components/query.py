@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import asyncio
 import typing as t
+from concurrent.futures import ThreadPoolExecutor
 from uuid import uuid4
 
+from aiida import orm
 from reacton import use_effect, use_state
 from solara import Button, Row, Style, VBox
 from solara.core import component
@@ -23,12 +26,17 @@ def QueryPanel(handle_submit: t.Callable[[list[ResultModel]], None]):
         new_nodes = [*nodes, NodeModel(uuid4())]
         set_nodes(new_nodes)
 
-    def submit_query():
-        results = [
-            ResultModel(id=i, content=result)
-            for i, result in enumerate(AiiDAService.get_results(nodes), 1)
-        ]
-        handle_submit(results)
+    async def fetch_results() -> list[ResultModel]:
+        """Fetch results asynchronously."""
+        loop = asyncio.get_running_loop()
+        with ThreadPoolExecutor() as pool:
+            results = await loop.run_in_executor(pool, AiiDAService.get_results, nodes)
+        return [result.uuid for result in results]
+
+    async def submit_query():
+        results = [ResultModel(id=i, content=orm.load_node(uuid)) for i, uuid in enumerate(await fetch_results(), 1)]
+        if results:
+            await handle_submit(results)
 
     def clear_query():
         set_nodes([NodeModel(uuid4(), is_root=True)])
@@ -80,7 +88,7 @@ def QueryPanel(handle_submit: t.Callable[[list[ResultModel]], None]):
                 Button(
                     "Submit",
                     color="success",
-                    on_click=submit_query,
+                    on_click=lambda: asyncio.create_task(submit_query()),
                     disabled=not is_valid
                 )
 

@@ -7,6 +7,7 @@ from dataclasses import dataclass
 
 import aiida.plugins.entry_point as ep
 from aiida import orm
+from aiida.manage.configuration import load_profile
 from aiida.plugins.factories import BaseFactory
 from yaml import safe_load
 
@@ -20,6 +21,7 @@ class AiiDAService:
     @staticmethod
     def get_results(nodes: list[NodeModel]) -> list[t.Any]:
         """docstring"""
+        _ = load_profile()
         if not (query := get_query_from_node_models(nodes)):
             return []
         qb = orm.QueryBuilder()

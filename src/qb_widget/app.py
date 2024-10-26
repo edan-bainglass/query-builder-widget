@@ -17,13 +17,16 @@ def App():
     """Main page component."""
     selected_tab, set_selected_tab = use_state(0)
     results, set_results = use_state(t.cast(list[ResultModel], []))
+    is_loading, set_loading = use_state(False)
 
     def switch_tab(value: int):
         set_selected_tab(value)
 
     def update_results(new_results: list[ResultModel]):
+        set_loading(True)
         set_results(new_results)
         set_selected_tab(1)
+        set_loading(False)
 
     Style(css / "app.css")
 
@@ -35,6 +38,6 @@ def App():
             with Tab("Query"):
                 QueryPanel(handle_submit=update_results)
             with Tab("Results"):
-                ResultsPanel(results)
+                ResultsPanel(results, is_loading)
             with Tab("Help"):
                 HelpPanel()

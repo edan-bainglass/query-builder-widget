@@ -3,7 +3,7 @@ from __future__ import annotations
 import typing as t
 
 from reacton import use_state
-from solara import Button, Row, Style, Text, VBox
+from solara import Button, Row, SpinnerSolara, Style, Text, VBox
 from solara.core import component
 
 from qb_widget.assets.styles import css
@@ -14,7 +14,7 @@ if t.TYPE_CHECKING:
 
 
 @component
-def ResultsPanel(results: list[ResultModel]):
+def ResultsPanel(results: list[ResultModel], is_loading: bool):
     """Results panel component."""
     page, set_page = use_state(1)
 
@@ -78,6 +78,11 @@ def ResultsPanel(results: list[ResultModel]):
             ResultCard(result)
 
     with VBox(classes=["container results-panel"]):
-        if results:
+        if is_loading:
+            with Row(classes=["justify-center"]):
+                SpinnerSolara()
+        elif results:
             Pagination()
-        ResultList()
+            ResultList()
+        else:
+            Text("No results to display", classes=["text-center"])
