@@ -6,27 +6,42 @@ from collections import OrderedDict
 from dataclasses import dataclass
 
 import aiida.plugins.entry_point as ep
+import requests
 from aiida import orm
 from aiida.plugins.factories import BaseFactory
+from requests import Response
 from yaml import safe_load
 
 if t.TYPE_CHECKING:
     from qb_widget.models.node import NodeModel
 
 
+API = "http://localhost:5000/api/v4"
+
+
 class AiiDAService:
     """docstring"""
 
     @staticmethod
-    def get_results(nodes: list[NodeModel]) -> list[t.Any]:
+    def get_results(nodes: list[NodeModel]) -> list[dict[str, t.Any]]:
         """docstring"""
         if not (query := get_query_from_node_models(nodes)):
             return []
         qb = orm.QueryBuilder()
         for node, args in query:
             qb.append(node, **args)  # type: ignore
-        qb.limit(1000)
-        return qb.all(flat=True)
+        qb.limit(5001)
+        response: Response = requests.post(f"{API}/querybuilder", json=qb.as_dict())
+        if response.ok:
+            try:
+                data = response.json()["data"]
+                return [*data.values()][0]
+            except Exception as err:
+                print(err)
+                return []
+        else:
+            print(response.text)
+            return []
 
     @staticmethod
     def get_node_types() -> dict[str, NodeType]:
@@ -188,6 +203,7 @@ class NodeType:
     `entry_point` : `str`
         The entry point of the node type, e.g. `core.int`.
     """
+
     name: str = ""
     group: str = ""
     entry_point: str = ""
